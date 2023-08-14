@@ -8,7 +8,7 @@ public class ConexionBD {
     private static final int PORT = 3306;
     private static final String USER = "root";
     private static final String PASSWORD = "123456";
-    private static final String DATABASE = "ATM";
+    private static final String DATABASE = "atm";
 
     public static Connection getConnection() throws SQLException {
         String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DATABASE);

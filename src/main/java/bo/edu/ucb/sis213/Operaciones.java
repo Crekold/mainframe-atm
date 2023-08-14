@@ -24,11 +24,8 @@ public class Operaciones {
         return saldo;
     }
 
-    public static void realizarDeposito(Connection connection, int usuarioId, double cantidad,double saldo) {
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-            return;
-        }
+    public static String realizarDeposito(Connection connection, int usuarioId, double cantidad) {
+        double saldo = Operaciones.consultarSaldo(connection, usuarioId);
 
         String actualizarSaldoQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
         String registrarDepositoQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
@@ -49,32 +46,42 @@ public class Operaciones {
 
             connection.commit();
 
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + (saldo + cantidad));
+            return("Depósito realizado con éxito. Su nuevo saldo es: $" + (saldo + cantidad));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "hola";
     }
 
-    public static void realizarRetiro(Connection connection, int usuarioId, double cantidad) {
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-            return;
-        }
-
-        double saldo = consultarSaldo(connection, usuarioId);
-
-        if (cantidad > saldo) {
-            System.out.println("Saldo insuficiente.");
-            return;
-        }
-
+    public static String realizarRetiro(Connection connection, int usuarioId, double cantidad) {
+        
+        double saldo = Operaciones.consultarSaldo(connection, usuarioId);
+    
         String actualizarSaldoQuery = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?";
-        try (PreparedStatement retiroStatement = connection.prepareStatement(actualizarSaldoQuery)) {
+        String registrarRetiroQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
+    
+        try (PreparedStatement retiroStatement = connection.prepareStatement(actualizarSaldoQuery);
+             PreparedStatement historicoStatement = connection.prepareStatement(registrarRetiroQuery)) {
+    
+            connection.setAutoCommit(false);
+    
             retiroStatement.setDouble(1, cantidad);
             retiroStatement.setInt(2, usuarioId);
             retiroStatement.executeUpdate();
+    
+            historicoStatement.setInt(1, usuarioId);
+            historicoStatement.setString(2, "Retiro");
+            historicoStatement.setDouble(3, cantidad);
+            historicoStatement.executeUpdate();
+    
+            connection.commit();
+    
+            saldo -= cantidad;
+            return("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "hola";
     }
+    
 }
