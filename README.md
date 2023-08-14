@@ -68,7 +68,7 @@ mvn clean install
 ## Ejecución
 
 ```
-mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.App"
+mvn exec:java -Dexec.mainClass="bo.edu.ucb.sis213.CajeroAutomaticoGUI"
 ```
 
 ## Instalación de la Base de Datos
