@@ -8,17 +8,29 @@ import java.awt.event.ActionListener;
 public class MenuPrincipalPanel extends JPanel {
     private CajeroAutomatico cajero;
     private Color backgroundColor = new Color(173, 216, 230);
+    private Image backgroundImage; 
+
+    
     public MenuPrincipalPanel(CajeroAutomatico cajero) {
         this.cajero = cajero;
 
-        setLayout(new GridLayout(5, 1, 10, 10));
+        setLayout(new GridBagLayout()); // Usamos GridBagLayout
+        setBackground(backgroundColor); // Aplicamos el color de fondo
+         // Cargar la imagen de fondo
+        backgroundImage = new ImageIcon("src\\images\\background.jpg").getImage();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
+        // Botones
         JButton consultarSaldoButton = new JButton("Consultar Saldo");
         JButton realizarDepositoButton = new JButton("Realizar Depósito");
         JButton realizarRetiroButton = new JButton("Realizar Retiro");
         JButton cambiarPINButton = new JButton("Cambiar PIN");
         JButton salirButton = new JButton("Salir");
 
+        // ActionListener para cada botón (sigue el mismo patrón)
+        
         consultarSaldoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,35 +157,47 @@ public class MenuPrincipalPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-        });
+        }); 
+
+        UIManager.put("OptionPane.background", new Color(173, 216, 230)); // Cambia por el color que desees
+        UIManager.put("Panel.background", new Color(173, 216, 230)); // Cambia por el color que desees
+
+        // Restablecer la apariencia original al cerrar el programa
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            UIManager.put("OptionPane.background", UIManager.get("Panel.background"));
+            UIManager.put("Panel.background", UIManager.get("Panel.background"));
+        }));
+        // Estilo de los botones
         Font buttonFont = new Font("Arial", Font.BOLD, 14);
         Color buttonColor = new Color(70, 130, 180); // Azul acero
         Color buttonTextColor = Color.WHITE;
 
-        consultarSaldoButton.setFont(buttonFont);
-        consultarSaldoButton.setBackground(buttonColor);
-        consultarSaldoButton.setForeground(buttonTextColor);
+        JButton[] buttons = {
+            consultarSaldoButton,
+            realizarDepositoButton,
+            realizarRetiroButton,
+            cambiarPINButton,
+            salirButton
+        };
 
-        realizarDepositoButton.setFont(buttonFont);
-        realizarDepositoButton.setBackground(buttonColor);
-        realizarDepositoButton.setForeground(buttonTextColor);
+        for (JButton button : buttons) {
+            button.setFont(buttonFont);
+            button.setBackground(buttonColor);
+            button.setForeground(buttonTextColor);
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 1;
+            gbc.anchor = GridBagConstraints.CENTER;
+            add(button, gbc);
+        }
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-        realizarRetiroButton.setFont(buttonFont);
-        realizarRetiroButton.setBackground(buttonColor);
-        realizarRetiroButton.setForeground(buttonTextColor);
-
-        cambiarPINButton.setFont(buttonFont);
-        cambiarPINButton.setBackground(buttonColor);
-        cambiarPINButton.setForeground(buttonTextColor);
-
-        salirButton.setFont(buttonFont);
-        salirButton.setBackground(buttonColor);
-        salirButton.setForeground(buttonTextColor);
-
-        add(consultarSaldoButton);
-        add(realizarDepositoButton);
-        add(realizarRetiroButton);
-        add(cambiarPINButton);
-        add(salirButton);
+        // Pintar la imagen de fondo
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }
