@@ -23,6 +23,7 @@ public class Operaciones {
 
         return saldo;
     }
+    
 
     public static String realizarDeposito(Connection connection, int usuarioId, double cantidad) {
         double saldo = Operaciones.consultarSaldo(connection, usuarioId);

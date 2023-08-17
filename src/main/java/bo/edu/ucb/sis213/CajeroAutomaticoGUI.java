@@ -14,8 +14,9 @@ public class CajeroAutomaticoGUI {
     private JFrame loginFrame;
     private JFrame menuPrincipalFrame;
     private CajeroAutomatico cajero;
-
+    
     public CajeroAutomaticoGUI() {
+        cajero = new CajeroAutomatico(); 
         // Inicialización de los frames y otros componentes
         loginFrame = new JFrame("Inicio de Sesión");
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,22 +41,33 @@ public class CajeroAutomaticoGUI {
         gbc.gridwidth = 2;
         loginPanel.add(logoLabel, gbc);
 
-        JLabel pinLabel = new JLabel("PIN:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        loginPanel.add(pinLabel, gbc);
+        JLabel userLabel = new JLabel("Usuario:");
+gbc.gridx = 0;
+gbc.gridy = 1;
+gbc.gridwidth = 1;
+loginPanel.add(userLabel, gbc);
 
-        JPasswordField pinField = new JPasswordField();
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        loginPanel.add(pinField, gbc);
+JTextField userField = new JTextField();
+gbc.gridx = 1;
+gbc.gridy = 1;
+loginPanel.add(userField, gbc);
 
-        JButton loginButton = new JButton("Iniciar Sesión");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        loginPanel.add(loginButton, gbc);
+JLabel pinLabel = new JLabel("PIN:");
+gbc.gridx = 0;
+gbc.gridy = 2;
+gbc.gridwidth = 1;
+loginPanel.add(pinLabel, gbc);
+
+JPasswordField pinField = new JPasswordField();
+gbc.gridx = 1;
+gbc.gridy = 2;
+loginPanel.add(pinField, gbc);;
+
+JButton loginButton = new JButton("Iniciar Sesión");
+gbc.gridx = 0;
+gbc.gridy = 3;
+gbc.gridwidth = 2;
+loginPanel.add(loginButton, gbc);
 
         loginButton.setBackground(new Color(100, 149, 237)); // Color de fondo del botón
         loginButton.setForeground(Color.white); // Color de texto del botón
@@ -65,28 +77,28 @@ public class CajeroAutomaticoGUI {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String username = userField.getText();
                 int pin = Integer.parseInt(new String(pinField.getPassword()));
-                CajeroAutomatico cajero = new CajeroAutomatico();
-                if (cajero.validarPIN(pin)) {
+                
+                if (cajero.validarUsuarioYPIN(username, pin)) {
                     mostrarMenuPrincipalFrame();
                 } else {
-                    JOptionPane.showMessageDialog(loginFrame, "PIN incorrecto. Intente nuevamente.");
+                    JOptionPane.showMessageDialog(loginFrame, "Usuario o PIN incorrecto. Intente nuevamente.");
                 }
             }
         });
-
+        
         loginFrame.add(loginPanel);
         menuPrincipalFrame = new JFrame("Menú Principal");
         menuPrincipalFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuPrincipalFrame.setSize(600, 400);
         menuPrincipalFrame.setLocationRelativeTo(null); // Centrar en la pantalla
 
-        cajero = new CajeroAutomatico(); // Instancia del CajeroAutomatico (ajusta según tu código)
-
+        // Instancia del CajeroAutomatico (ajusta según tu código)
+    
         MenuPrincipalPanel menuPrincipalPanel = new MenuPrincipalPanel(cajero); // Agrega el panel del menú principal
 
         menuPrincipalFrame.add(menuPrincipalPanel);
-
         // Mostrar la vista de inicio de sesión por defecto
         mostrarLoginFrame();
     }

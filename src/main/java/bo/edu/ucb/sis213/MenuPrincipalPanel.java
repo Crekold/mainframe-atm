@@ -9,11 +9,12 @@ public class MenuPrincipalPanel extends JPanel {
     private CajeroAutomatico cajero;
     private Color backgroundColor = new Color(173, 216, 230);
     private Image backgroundImage; 
-
     
+
     public MenuPrincipalPanel(CajeroAutomatico cajero) {
         this.cajero = cajero;
-
+        String ola =cajero.getNombre();
+        System.out.println(ola);
         setLayout(new GridBagLayout()); // Usamos GridBagLayout
         setBackground(backgroundColor); // Aplicamos el color de fondo
          // Cargar la imagen de fondo
@@ -22,13 +23,27 @@ public class MenuPrincipalPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
+
+        
+        // Crear el label de bienvenida
+        JLabel bienvenidaLabel = new JLabel("Bienvenido");
+        bienvenidaLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        bienvenidaLabel.setForeground(Color.WHITE); // Color del texto
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(bienvenidaLabel, gbc);
+        
+
+
         // Botones
         JButton consultarSaldoButton = new JButton("Consultar Saldo");
         JButton realizarDepositoButton = new JButton("Realizar Depósito");
         JButton realizarRetiroButton = new JButton("Realizar Retiro");
         JButton cambiarPINButton = new JButton("Cambiar PIN");
         JButton salirButton = new JButton("Salir");
-
+        
         // ActionListener para cada botón (sigue el mismo patrón)
         
         consultarSaldoButton.addActionListener(new ActionListener() {
@@ -81,6 +96,7 @@ public class MenuPrincipalPanel extends JPanel {
                         try {
                             cantidad = Double.parseDouble(cantidadStr);
                             double saldoActual = cajero.consultarSaldo();
+    
                             if (cantidad > 0) {
                                 
                                 if (cantidad<=saldoActual) {
@@ -119,8 +135,8 @@ public class MenuPrincipalPanel extends JPanel {
                 }
         
                 int pinIngresado = Integer.parseInt(pinIngresadoStr);
-        
-                if (cajero.validarPIN(pinIngresado)) {
+                String alias = CajeroAutomatico.getAlias();
+                if (cajero.validarUsuarioYPIN(alias, pinIngresado)) {
                     String nuevoPinStr = JOptionPane.showInputDialog(MenuPrincipalPanel.this, "Ingrese su nuevo PIN:");
                     if (nuevoPinStr == null) {
                         return;  // Si se cancela el cuadro de diálogo, salir de la acción
@@ -171,6 +187,7 @@ public class MenuPrincipalPanel extends JPanel {
         Font buttonFont = new Font("Arial", Font.BOLD, 14);
         Color buttonColor = new Color(70, 130, 180); // Azul acero
         Color buttonTextColor = Color.WHITE;
+
 
         JButton[] buttons = {
             consultarSaldoButton,
