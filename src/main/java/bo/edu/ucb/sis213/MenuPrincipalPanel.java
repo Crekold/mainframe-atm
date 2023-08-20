@@ -13,8 +13,6 @@ public class MenuPrincipalPanel extends JPanel {
 
     public MenuPrincipalPanel(CajeroAutomatico cajero) {
         this.cajero = cajero;
-        String ola =cajero.getNombre();
-        System.out.println(ola);
         setLayout(new GridBagLayout()); // Usamos GridBagLayout
         setBackground(backgroundColor); // Aplicamos el color de fondo
          // Cargar la imagen de fondo

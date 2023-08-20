@@ -81,6 +81,7 @@ loginPanel.add(loginButton, gbc);
                 int pin = Integer.parseInt(new String(pinField.getPassword()));
                 
                 if (cajero.validarUsuarioYPIN(username, pin)) {
+
                     mostrarMenuPrincipalFrame();
                 } else {
                     JOptionPane.showMessageDialog(loginFrame, "Usuario o PIN incorrecto. Intente nuevamente.");

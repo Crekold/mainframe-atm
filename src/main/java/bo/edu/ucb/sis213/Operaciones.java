@@ -84,5 +84,18 @@ public class Operaciones {
         }
         return "hola";
     }
+    public static String cambiarPIN(Connection connection, int usuarioId, int nuevoPin) {
+        String actualizarPINQuery = "UPDATE usuarios SET pin = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(actualizarPINQuery)) {
+            preparedStatement.setInt(1, nuevoPin);
+            preparedStatement.setInt(2, usuarioId);
+            preparedStatement.executeUpdate();
+            return("PIN actualizado con éxito.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
+    
     
 }
