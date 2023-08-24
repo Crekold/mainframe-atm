@@ -16,9 +16,11 @@ public class CajeroAutomaticoGUI {
     private JFrame loginFrame;
     private JFrame menuPrincipalFrame;
     private CajeroAutomatico cajero;
+ 
     
     public CajeroAutomaticoGUI() {
         cajero = new CajeroAutomatico(); 
+      
         // Inicialización de los frames y otros componentes
         loginFrame = new JFrame("Inicio de Sesión");
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,16 +79,30 @@ loginPanel.add(loginButton, gbc);
         loginButton.setBorder(BorderFactory.createEmptyBorder()); // Sin borde
 
         loginButton.addActionListener(new ActionListener() {
+            private int intentos = 0;
+    
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = userField.getText();
                 int pin = Integer.parseInt(new String(pinField.getPassword()));
                 
-                if (cajero.validarUsuarioYPIN(username, pin)) {
-
-                    mostrarMenuPrincipalFrame();
+                if (intentos < 3) {
+                    if (cajero.validarUsuarioYPIN(username, pin)) {
+                        mostrarMenuPrincipalFrame();
+                    } else {
+                        intentos++;
+                        int intentosRestantes = 3 - intentos;
+                        if (intentosRestantes > 0) {
+                            System.out.println(intentosRestantes);
+                            JOptionPane.showMessageDialog(loginFrame, "Usuario o PIN incorrecto. Intente nuevamente. Intentos restantes: " + intentosRestantes);
+                        } else {
+                            JOptionPane.showMessageDialog(loginFrame, "Usuario o PIN incorrecto. Ha excedido el número máximo de intentos.");
+                            System.exit(0); // Salir del programa después de exceder los intentos
+                        }
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(loginFrame, "Usuario o PIN incorrecto. Intente nuevamente.");
+                    JOptionPane.showMessageDialog(loginFrame, "Ha excedido el número máximo de intentos.");
+                    System.exit(0); // Salir del programa después de exceder los intentos
                 }
             }
         });

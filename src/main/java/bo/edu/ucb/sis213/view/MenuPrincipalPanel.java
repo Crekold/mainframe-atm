@@ -1,9 +1,12 @@
 package bo.edu.ucb.sis213.view;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import bo.edu.ucb.sis213.bl.CajeroAutomatico;
-
+import bo.edu.ucb.sis213.pl.Transaccion;
+ // Asegúrate de importar ArrayList
+import java.util.List; 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +45,7 @@ public class MenuPrincipalPanel extends JPanel {
         JButton consultarSaldoButton = new JButton("Consultar Saldo");
         JButton realizarDepositoButton = new JButton("Realizar Depósito");
         JButton realizarRetiroButton = new JButton("Realizar Retiro");
+        JButton consultarHistorialButton = new JButton("Consultar Historial");
         JButton cambiarPINButton = new JButton("Cambiar PIN");
         JButton salirButton = new JButton("Salir");
         
@@ -121,6 +125,27 @@ public class MenuPrincipalPanel extends JPanel {
             }
         });
         
+consultarHistorialButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        List<Transaccion> transacciones = cajero.obtenerHistorialTransacciones();
+        
+        Object[][] data = new Object[transacciones.size()][3];
+        for (int i = 0; i < transacciones.size(); i++) {
+            Transaccion transaccion = transacciones.get(i);
+            data[i] = new Object[]{transaccion.getFecha(), transaccion.getTipoOperacion(), transaccion.getCantidad()};
+        }
+
+        String[] columnNames = {"Fecha", "Tipo de Operación", "Cantidad"};
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+
+        JTable table = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        JOptionPane.showMessageDialog(MenuPrincipalPanel.this, scrollPane, "Historial de Transacciones", JOptionPane.PLAIN_MESSAGE);
+    }
+});
+
 
         cambiarPINButton.addActionListener(new ActionListener() {
             @Override
@@ -194,6 +219,7 @@ public class MenuPrincipalPanel extends JPanel {
             consultarSaldoButton,
             realizarDepositoButton,
             realizarRetiroButton,
+            consultarHistorialButton,
             cambiarPINButton,
             salirButton
         };

@@ -1,9 +1,12 @@
 package bo.edu.ucb.sis213.pl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Operaciones {
     public static double consultarSaldo(Connection connection, int usuarioId) {
@@ -84,6 +87,29 @@ public class Operaciones {
         }
         return "hola";
     }
+    public static List<Transaccion> consultarHistorialTransacciones(Connection connection, int usuarioId) {
+        List<Transaccion> transacciones = new ArrayList<>();
+
+        String consultarHistorialQuery = "SELECT fecha, tipo_operacion, cantidad FROM historico WHERE usuario_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(consultarHistorialQuery)) {
+            preparedStatement.setInt(1, usuarioId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Date fecha = resultSet.getDate("fecha");
+                    String tipoOperacion = resultSet.getString("tipo_operacion");
+                    double cantidad = resultSet.getDouble("cantidad");
+                    Transaccion transaccion = new Transaccion(fecha, tipoOperacion, cantidad);
+                    transacciones.add(transaccion);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return transacciones;
+    }
+
+    
     public static String cambiarPIN(Connection connection, int usuarioId, int nuevoPin) {
         String actualizarPINQuery = "UPDATE usuarios SET pin = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(actualizarPINQuery)) {

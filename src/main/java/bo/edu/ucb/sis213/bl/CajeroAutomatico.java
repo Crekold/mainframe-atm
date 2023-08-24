@@ -3,9 +3,11 @@ package bo.edu.ucb.sis213.bl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 import bo.edu.ucb.sis213.pl.ConexionBD;
 import bo.edu.ucb.sis213.pl.Operaciones;
+import bo.edu.ucb.sis213.pl.Transaccion;
 public class CajeroAutomatico {
     private static int usuarioId;
     private static String alias;
@@ -42,7 +44,10 @@ public class CajeroAutomatico {
     public String realizarRetiro(double cantidad) {
         return Operaciones.realizarRetiro(connection, usuarioId, cantidad);
     }
-
+     public List<Transaccion> obtenerHistorialTransacciones() {
+        return Operaciones.consultarHistorialTransacciones(connection, usuarioId);
+    }
+    
     public String cambiarPIN(int nuevoPin) {
                 return Operaciones.cambiarPIN(connection, usuarioId, nuevoPin);
             }
