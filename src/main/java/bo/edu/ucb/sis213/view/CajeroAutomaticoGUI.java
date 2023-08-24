@@ -1,4 +1,4 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.view;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Insets;
 
 import javax.swing.*;
+
+import bo.edu.ucb.sis213.bl.CajeroAutomatico;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

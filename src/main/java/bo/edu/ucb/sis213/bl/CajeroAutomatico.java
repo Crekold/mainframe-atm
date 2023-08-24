@@ -1,8 +1,11 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.bl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import bo.edu.ucb.sis213.pl.ConexionBD;
+import bo.edu.ucb.sis213.pl.Operaciones;
 public class CajeroAutomatico {
     private static int usuarioId;
     private static String alias;
